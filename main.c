@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "frozen.h"
 
-int openFile(char file[], char **json);
+int extractJson(char file[], char **json);
 
 
 int main(int argc, char *argv[])
@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	struct json_token *arr, *tok;
 	char *json = NULL;
 	
-	if (openFile("livre.json", &json))
+	if (extractJson("model.json", &json))
 	{
 
 		// Tokenize json string, fill in tokens array
@@ -23,14 +23,18 @@ int main(int argc, char *argv[])
 		printf("Value of bar is: [%.*s]\n", tok->len, tok->ptr);
 
 		//Do not forget to free allocated tokens array
-		free(arr);	
+		free(arr);
+		free(json);
 	}
 	
 	return 0;
 }
 
-int openFile(char file[], char **json)
+int extractJson(char file[], char **json)
 {
+	/* The aim of this fonction is to extract the Json file in 
+	 * a characters string in order to read its tokens
+	 */
 	int fileLength = 0, i = 0, c=0;
 	FILE* jsonFile = NULL;
 
@@ -38,6 +42,7 @@ int openFile(char file[], char **json)
 	if ( jsonFile != NULL )
 	{		
 		for (fileLength=0; fgetc(jsonFile) != EOF; fileLength++);
+		//get amount of characters to allocate a right size string
 		*json = malloc(fileLength * sizeof(char));
 		
 		rewind(jsonFile);
@@ -45,7 +50,7 @@ int openFile(char file[], char **json)
 		
 		for(i=0; i< fileLength; i++)
 		{
-		
+			//write only readable characters		
 			c = fgetc(jsonFile);
 		
 			if( isalnum(c) || ispunct(c))
@@ -55,14 +60,12 @@ int openFile(char file[], char **json)
 				(*json)[i] = (char)c;
 		
 			}
-		
 			else
-		
 			{
-		
-				(*json)[i] = ' ';
-		
+				(*json)[i]= ' ';						
 			}
+		
+		
 			
 		}
 	
