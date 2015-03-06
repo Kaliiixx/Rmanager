@@ -1,0 +1,29 @@
+{
+	"type": "TYPE"
+	{
+
+	},
+
+	"common" : 
+	{	
+		"title": "A title",
+		"condition" : 
+		[
+			"new",
+			"very good",
+			"good",
+			"middling",
+			"bad",
+			"very bad",
+			"worn"
+		
+		],
+		"Number": "0",
+		"procurement_date": "YYYY:MM:DD",
+		"place": "ABC123",
+		"release_date": "YYYY:MM:DD",
+		"format": "pocket",
+		"language": "EN-US"
+	}
+}
+
