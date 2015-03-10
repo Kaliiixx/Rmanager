@@ -1,29 +1,37 @@
 {
-	"type": "TYPE"
+	"type": "BOOK",
 	{
+		"publisher": "PUBLISHER",
+		"series": "SERIES",
+		"pages": "100",
+		"authors":
+		[
+			"Albert Einstein",
+			"Isaac Newton"			
+		],
+		"genre": "GENRE",
+		"translator": "Denis Richie",
+		"version": "DIGITAL",
+		"isbn": "2-940199-61-2",
 
 	},
 
 	"common" : 
 	{	
 		"title": "A title",
-		"condition" : 
-		[
-			"new",
-			"very good",
-			"good",
-			"middling",
-			"bad",
-			"very bad",
-			"worn"
-		
-		],
-		"Number": "0",
+		"condition" : "new",
+		"licence": "CC−BB",
+		"number": "0",
 		"procurement_date": "YYYY:MM:DD",
 		"place": "ABC123",
 		"release_date": "YYYY:MM:DD",
 		"format": "pocket",
-		"language": "EN-US"
+		"language": "EN-US",
+		"decription": 
+		[
+			"This is a wonderful book",
+			"input:bookMODEL.png"
+		]
 	}
 }
 
