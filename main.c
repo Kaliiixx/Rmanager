@@ -12,19 +12,18 @@ int main(int argc, char *argv[])
 	struct json_token *arr, *tok;
 	char *json = NULL;
 	
-	if (extractJson("model.json", &json))
+	if (extractJson("files/model.json", &json))
 	{
 
 		// Tokenize json string, fill in tokens array
 		arr = parse_json2(json, strlen(json));
 
 		//Search for parameter "bar" and print it's value
-		tok = find_json_token(arr, "key_1");
-		printf("Value of bar is: [%.*s]\n", tok->len, tok->ptr);
+		tok = find_json_token(arr, "type");
+		printf("Value of bar is: %.*s\n", tok->len, tok->ptr);
 
 		//Do not forget to free allocated tokens array
 		free(arr);
-		free(json);
 	}
 	
 	return 0;
@@ -35,13 +34,31 @@ int extractJson(char file[], char **json)
 	/* The aim of this fonction is to extract the Json file in 
 	 * a characters string in order to read its tokens
 	 */
-	int fileLength = 0, i = 0, c=0;
+	int fileLength = 0, i = 0, c = 0, quote = 1;
 	FILE* jsonFile = NULL;
 
 	jsonFile = fopen(file, "r");
 	if ( jsonFile != NULL )
 	{		
-		for (fileLength=0; fgetc(jsonFile) != EOF; fileLength++);
+		for (fileLength=0; (c = fgetc(jsonFile)) != EOF; )
+		{
+			//don’t count only letters, numbers, and punctuation exept in the quotes
+			
+			if ( c == '"')
+			{
+				quote ++ ;
+
+			}
+
+			
+			if ( isalnum(c) || ispunct(c) ||  quote%2 == 0)
+			{
+				fileLength++ ;
+			}
+		}
+		
+		quote = 1 ;
+
 		//get amount of characters to allocate a right size string
 		*json = malloc(fileLength * sizeof(char));
 		
@@ -52,17 +69,22 @@ int extractJson(char file[], char **json)
 		{
 			//write only readable characters		
 			c = fgetc(jsonFile);
+
+			if ( c == '"')
+			{
+				quote++ ;			
+			}
 		
-			if( isalnum(c) || ispunct(c))
+			if(isalnum(c) || ispunct(c) || quote%2 == 0)
 	
 			{
 		
 				(*json)[i] = (char)c;
-		
 			}
+			
 			else
 			{
-				(*json)[i]= ' ';						
+				i--;						
 			}
 		
 		
