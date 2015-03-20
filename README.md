@@ -12,5 +12,29 @@ The program is splitted into three parts for three actors :
 * User
 * Treasurer
 
-#### Book manager
-The book manager has 
+#### To do
+##### Priorities
+* Books management
+	* loans
+	* giving back
+	* loan renwals
+	* reservations
+	* latenesses
+
+* Periodical management
+
+* Catalog
+
+* User management
+	* User lists creation
+
+* Acquisitions management
+	* budget management
+	* baskets
+	* claimings
+
+####Secondary
+* Users can read and add comments to an item
+* The Database run with multi site transfers
+* Statistic reports about items with preferences
+
