@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "frozen.h"
+#include "json.h"
+#include "struct.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,42 +27,3 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-typedef struct Common Common
-struct Common
-{
-	char *title = NULL;
-	char *condition = NULL;
-	char *licence = NULL;
-	int  number = 0;
-	char procurement_date[10] = {};
-	char *place = NULL;
-	char release_date[10] = {};
-	char *format = NULL;
-	char language[5] = NULL;
-	char *description = NULL;
-}
-
-
-typedef struct Book Book
-struct Book
-{
-	Common common;
-	char *publisher = NULL;
-	char *serie = NULL;
-	int page = 0;
-	char *author = NULL;
-	char *genre = NULL;
-	char *translator = NULL;
-	char *version = NULL;
-	char isbn[17] = {};
-	
-}
-
-
-int extractBook (Book *book, json[])
-{
-
-
-
-
-}
