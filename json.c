@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
+#include "frozen.h"
+#include "struct.h"
 
 int extractJson(char file[], char **json)
 {
@@ -72,3 +75,91 @@ int extractJson(char file[], char **json)
 	else { printf("Error : Could not open the file"); return 0;}
 }
 
+int addBook()
+{
+	Book book;
+	FILE* jsonFile = NULL;
+	char fileName[128], buf[1000];
+	
+	snprintf(fileName,sizeof(fileName), "%ld", time(NULL));
+	
+	while( fopen(fileName,"r") != NULL )
+	{
+		strcat(fileName,"0");
+
+	}
+	
+	jsonFile = fopen(fileName,"w");
+
+	if( jsonFile != NULL )
+	{
+		printf("\nTitle : ");
+		scanf("%s",&book.common.title);
+		
+		printf("\nCondition : ");
+		scanf("%c",&book.common.condition);
+
+		printf("\nLicence : ");
+		scanf("%s",&book.common.licence);
+		
+		printf("\nPlace : ");
+		scanf("%s",&book.common.place);
+		
+		printf("\nFormat : ");
+		scanf("%c",&book.common.format);
+		
+		printf("\nTitle : ");
+		scanf("%s",&book.common.title);
+		
+		printf("\nProcurement date : ");
+		scanf("%s",&book.common.procurement_date);
+		
+		printf("\nRelease date : ");
+		scanf("%s",&book.common.release_date);
+
+		printf("\nLanguage: ");
+		scanf("%s",&book.common.language);
+
+		printf("\nProcurement date : ");
+		scanf("%s",&book.common.procurement_date);
+
+		printf("\nnumber : ");
+		scanf("%d",&book.common.number);
+
+		printf("\nPublisher : ");
+		scanf("%s",&book.publisher);
+		
+		printf("\nSerie : ");
+		scanf("%s",&book.serie);
+		
+		printf("\nGenre : ");
+		scanf("%s",&book.genre);
+
+		printf("\nNumber of translators : ");
+		scanf("%d",&book.serie);
+
+		printf("\nTranslators : ");
+		scanf("%s",&book.serie);
+		
+		printf("\nVersion : ");
+		scanf("%s",&book.version);
+
+		printf("\nNumber of authors");  
+		scanf("%d",&book.nbAuthor);
+
+		printf("\nAuthors : ");
+		scanf("%s",&book.author);
+
+		printf("\nISBN : ");
+		scanf("%s",&book.isbn);
+
+		printf("\nPages : ");
+		scanf("%d",&book.page);
+
+		json_emit(buf, sizeof(buf),    }")
+
+		fclose(jsonFile);
+	}
+
+	return 0;
+}
