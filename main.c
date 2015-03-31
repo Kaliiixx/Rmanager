@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
 	struct json_token *arr, *tok;
 	char *json = NULL;
-	
+	addBook();
 	if (extractJson("files/model.json", &json))
 	{
 
