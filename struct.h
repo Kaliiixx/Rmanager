@@ -3,31 +3,37 @@ typedef struct Common Common ;
 
 struct Common
 {
-	char *title;
-	char *condition;
-	char *licence;
-	char *place;
-	char *format;
-	char *description;
+	char title[500];
+	char condition;
+	char licence[500];
+	char place[100];
+	char format;
+	char description[1000];
 	
 	char procurement_date[10];
 	char release_date[10];
 	char language[5];
 	
-	int  number;
+	int number;
 };
 
 struct Book
 {
 	Common common;
 	
-	char *publisher;
-	char *serie;
-	char *author;
-	char *genre;
-	char *translator;
-	char *version;
+	char publisher[100];
+	char serie[100];
+
+	char genre[10];
 	
+	int nbTranslator;
+	char *translator[100];
+
+	char version;
+	
+	int nbAuthor;
+	char *author[100];
+
 	char isbn[17];
 	
 	int page;
