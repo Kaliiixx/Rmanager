@@ -5,10 +5,10 @@
 .SUFFIXES:
 
 CC = gcc
-CFLAGS = -W 
+CFLAGS = -Wall
 
 all: main.o frozen.o json.o cli.o
-	$(CC) main.o frozen.o json.o clio.o -o rmanager
+	$(CC) main.o frozen.o json.o cli.o -o rmanager
 
 main.o: frozen.c json.c main.c 
 	$(CC) -c main.c -o main.o $(CFLAGS)
