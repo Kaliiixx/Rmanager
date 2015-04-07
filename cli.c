@@ -4,7 +4,7 @@
 
 int readcli(int size, char type, void *pointer)
 {
-	int c = 0, i = 0;
+	int c = 0, number=0;
 
 	char *initialPosition = NULL;
 	char *string = NULL ;
@@ -24,21 +24,19 @@ int readcli(int size, char type, void *pointer)
 			while ( c != '\n' && c != EOF ){c = getchar();}
 		}
 		
-		switch(size)
+		switch(type)
 		{
-			case  'c' :
-				*pointer = (char)(((int)'0')+string[0]);
+			case 'c' :
+				*((char *)pointer) = string[0];
 			break;
 
 			case 's' :
-				for(i=0; i<size; i++)
-				{
-					pointer[i] = string[i];
-				}
+				strcpy(pointer, string); 
 			break;
-
+		
 			case 'i' :
-				*pointer = string[0];
+				number = strtol(string,'\0', 10);
+				*((int *)pointer) = number;	
 			break;
 			 
 			default :
