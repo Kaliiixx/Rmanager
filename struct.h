@@ -27,12 +27,12 @@ struct Book
 	char genre[10];
 	
 	int nbTranslator;
-	char *translator[100];
+	char **translator;
 
 	char version;
 	
 	int nbAuthor;
-	char *author[100];
+	char **author;
 
 	char isbn[17];
 	
