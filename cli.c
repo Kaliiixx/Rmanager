@@ -24,10 +24,11 @@ int readcli(int size, char type, void *pointer)
 			while ( c != '\n' && c != EOF ){c = getchar();}
 		}
 		
-		switch(type)
+		switch(type)	
 		{
-			case 'c' :
-				*((char *)pointer) = string[0];
+			
+			case  'c' :
+				sprintf(pointer, "%c", string[0]);
 			break;
 
 			case 's' :
@@ -35,7 +36,7 @@ int readcli(int size, char type, void *pointer)
 			break;
 		
 			case 'i' :
-				number = strtol(string,'\0', 10);
+				number = strtol(string,NULL, 10);
 				*((int *)pointer) = number;	
 			break;
 			 
