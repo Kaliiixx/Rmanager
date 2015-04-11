@@ -69,7 +69,6 @@ int extractJson(char file[], char **json)
 		
 			
 		}
-	
 	fclose(jsonFile);
 	return 1;
 	}
@@ -99,48 +98,43 @@ int addBook()
 
 	if( jsonFile != NULL )
 	{
-		printf("\nTitle : ");
-		READ(501,'s',&book.common.title)
+		READ("Title",501,'s',&book.common.title)
 		
-		printf("\nCondition : ");
-		READ(2,'c',&book.common.condition)
+		do
+		{
+			READ("Condition [New - Fine - Very good- Good - fAir - Poor - Ex-librairy]",2,'c',&book.common.condition)
+		}while(book.common.condition != 'N' && book.common.condition != 'F' && book.common.condition != 'V' && book.common.condition != 'G' && book.common.condition != 'A' && book.common.condition != 'P' && book.common.condition != 'E');
 		
-			printf("\nLicence : ");
-		READ(501,'s',&book.common.licence)
+		READ("Licence",501,'s',&book.common.licence)
 
-		printf("\nPlace : ");
-		READ(101,'s',&book.common.place)
+		READ("Place",101,'s',&book.common.place)
 		
-		printf("\nFormat : ");
-		READ(2,'c',&book.common.format)
-
-		printf("\nDescription : ");
-		READ(1001,'s',&book.common.description)
+		do
+		{
+			READ("Format [Pocket - Normal]",2,'c',&book.format)
+		}while(book.format != 'P' && book.format !='N');
 		
-		printf("\nProcurement date : ");
-		READ(11,'s',&book.common.procurement_date)
-
-		printf("\nRelease date : ");
-		READ(11,'s',&book.common.release_date)
-
-		printf("\nLanguage: ");
-		READ(6,'s',&book.common.language)
-
-		printf("\nnumber : ");
-		READ(100,'i',&book.common.number)
+		READ("Description",1001,'s',&book.common.description)
 		
-		printf("\nPublisher : ");
-		READ(101,'s',&book.publisher)
+		READ("Procurement date",11,'s',&book.common.procurement_date)
 
-		printf("\nSerie : ");
-		READ(101,'s',&book.serie)
+		READ("Release date",11,'s',&book.common.release_date)
 
-		printf("\nGenre : ");
-		READ(11,'s',&book.genre)
+		READ("Language",6,'s',&book.common.language)
 
-		printf("\nNumber of translators : ");
-		READ(2,'i',&book.nbTranslator)
-		
+		do {
+			READ("Number (≥0)",100,'i',&book.common.number)
+		}while(!isdigit(book.common.number) && book.common.number<0 );
+	
+		READ("Publisher",101,'s',&book.publisher)
+
+		READ("Serie",101,'s',&book.serie)
+
+		READ("Genre",11,'s',&book.genre)
+
+		do {
+			READ("Number of translators (≥0)",100,'i',&book.nbTranslator)
+		}while(!isdigit(book.nbTranslator) && book.nbTranslator<0 );	
 		if( book.nbTranslator >= 1)
 		{
 			*book.translator = malloc(book.nbTranslator * sizeof(char));
@@ -151,18 +145,29 @@ int addBook()
 
 			for(i=0; i<book.nbTranslator;  i++)
 			{
+				/** See this case 
+				 * to make it compatible
+				 * with readgui
+				 **/
+				
 				printf("\nTranslator n. %d : ", i+1);
-				READ(101,'s',&tmpString)
+				READ("",101,'s',&tmpString)
 				strcpy(book.translator[i], tmpString);
 			}
-
+			
+			for(i=0; i<100; i++)
+			{
+				tmpString[i] = 0;
+			}
 		}
+		
+		do {
+			READ("Version [Digital - Material]",2,'c',&book.common.version)
+		}while(book.common.version != 'D' && book.common.version != 'M');
 
-		printf("\nVersion : ");
-		READ(2,'c',&book.version)
-
-		printf("\nNumber of authors : ");  
-		READ(2,'i',&book.nbAuthor)
+		do {
+			READ("Number of authors (≥0):",100,'i',&book.nbAuthor)
+		}while(!isdigit(book.nbAuthor) && book.nbAuthor<0 );
 
 		if( book.nbAuthor >= 1)
 		{
@@ -174,22 +179,42 @@ int addBook()
 
 			for(i=0; i<book.nbAuthor;  i++)
 			{
+				/** See this case 
+				 * to make it compatible
+				 * with readgui
+				 **/
 				printf("\nAuthor n. %d : ", i+1);
-				READ(101,'s',&tmpString)
+				READ("",101,'s',&tmpString)
 				strcpy(book.author[i], tmpString);
 			}
 
 		}
-		printf("\nISBN : ");
-		READ(18,'s',&book.isbn)
+		READ("ISBN",18,'s',&book.isbn)
 
-		printf("\nPages : ");
-		READ(2,'i',&book.page)
+		do {
+			READ("Pages",100,'i',&book.page)
+		}while(!isdigit(book.page) && book.page<=0);
 
-		printf("%s", book.common.title);
+		fprintf(jsonFile,"{type: \"BOOK\",{\"publisher\": \"%s\",\"series\": \"%s\",\"pages\": \"%d\",\"authors\":[\"%d\"],\"genre\": \"%s\",\"translator\":\"%d\",\"version\": \"%c\",\"isbn\": \"%s\",},\"common\" :{\"title\": \"%s\",\"condition\" : \"%c\",\"licence\": \"%s\",\"number\": \"%d\",\"procurement_date\":\"%s\",\"place\": \"%s\",\"release_date\": \"%s\",\"format\": \"%c\",\"language\": \"%s\",\"description\":%s}}",book.publisher, book.serie, book.page, book.nbAuthor, book.genre, book.nbTranslator, book.common.version, book.isbn, book.common.title, book.common.condition,book.common.licence, book.common.number, book.common.procurement_date, book.common.place,book.common.release_date, book.format, book.common.language, book.common.description);
+		
+		if( book.nbTranslator >= 1)
+		{
+			for(i=0; i<book.nbTranslator; i++)
+			{
+				free(book.translator[i]);		
+			}
+			free(book.translator);
+		}			
+		
+		if( book.nbAuthor >= 1)
+		{
+			for(i=0; i<book.nbAuthor; i++)
+			{
+				free(book.author[i]);		
+			}
+			free(book.author);
+		}
 
-		fprintf(jsonFile,"{type: \"BOOK\",{\"publisher\": \"%s\",\"series\": \"%s\",\"pages\": \"%d\",\"authors\":[\"%d\"],\"genre\": \"%s\",\"translator\":\"%d\",\"version\": \"%c\",\"isbn\": \"%s\",},\"common\" :{\"title\": \"%s\",\"condition\" : \"%c\",\"licence\": \"%s\",\"number\": \"%d\",\"procurement_date\":\"%s\",\"place\": \"%s\",\"release_date\": \"%s\",\"format\": \"%c\",\"language\": \"%s\",\"description\":%s}}",book.publisher, book.serie, book.page, book.nbAuthor, book.genre, book.nbTranslator, book.version, book.isbn, book.common.title, book.common.condition,book.common.licence, book.common.number, book.common.procurement_date, book.common.place,book.common.release_date, book.common.format, book.common.language, book.common.description);
-			
 		fclose(jsonFile);
 	}
 
