@@ -3,11 +3,11 @@ typedef struct Common Common ;
 
 struct Common
 {
-	char title[500];
-	char condition;
+	char title[500]; //String
+	char condition; // New, Fine, Very good, Good, Fair, Poor, Ex-librairy.   
 	char licence[500];
 	char place[100];
-	char format;
+	char version;//Digital, Material
 	char description[1000];
 	
 	char procurement_date[10];
@@ -29,7 +29,7 @@ struct Book
 	int nbTranslator;
 	char **translator;
 
-	char version;
+	char format; //Pocket, Normal
 	
 	int nbAuthor;
 	char **author;
