@@ -6,13 +6,14 @@
 
 #ifdef CLI
 
-#define READ(size,type,variable) readcli(size,type,variable);
+#define READ(description,size,type,variable) readcli(description,size,type,variable);
 
 
 #endif
 
 #ifdef GUI
 
+#define READ(description,size,type,variable) readcli(description,size,type,variable);
 
 
 #endif
