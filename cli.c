@@ -1,16 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
+#include <ctype.h>
+#include "cli.h"
 
-int readcli(int size, char type, void *pointer)
+int readcli(char description[], int size, char type, void *pointer)
 {
-	int c = 0, number=0;
+	/** This function print char[] description, i.e. which data the user have to enter, 
+	 *  then it return them to the void *pointer, casted before
+	 *  depending on char type 
+	 **/
+
+	int c = 0 ;
 
 	char *initialPosition = NULL;
 	char *string = NULL ;
 
 	string = malloc(sizeof(char)*size);
 	
+	printf("\n%s : ", description);
 	
 	if ( fgets(string, size, stdin) != NULL )
 	{
@@ -28,6 +36,7 @@ int readcli(int size, char type, void *pointer)
 		{
 			
 			case  'c' :
+				string[0] = toupper(string[0]); 
 				sprintf(pointer, "%c", string[0]);
 			break;
 
@@ -36,8 +45,8 @@ int readcli(int size, char type, void *pointer)
 			break;
 		
 			case 'i' :
-				number = strtol(string,NULL, 10);
-				*((int *)pointer) = number;	
+				printf("%s", string);
+				*((int *)pointer) = strtol(string,NULL, 10); 
 			break;
 			 
 			default :
@@ -45,6 +54,7 @@ int readcli(int size, char type, void *pointer)
 			break;
 		}		
 		
+		free(string);
 		return 1;
 	}
 
@@ -55,6 +65,7 @@ int readcli(int size, char type, void *pointer)
 	else
 	{
 		while ( c != '\n' && c != EOF ){c = getchar();}
+		free(string);
 		return 0;
 	}
 }
