@@ -221,6 +221,7 @@ int writeJson (BOOK book)
 				{
 					fprintf(jsonFile,"\"%s\",", book.author[i]);
 				}
+				
 				fprintf(jsonFile,"],");
 				fprintf(jsonFile,"\"genre\": \"%s\",", book.genre);
 				fprintf(jsonFile,"\"translators\":[");
@@ -250,13 +251,17 @@ int writeJson (BOOK book)
 			fprintf(jsonFile,"}");
 			
 		fprintf(jsonFile,"}");
+		
 		fclose(jsonFile);
 	}
 	
 	else
 	{
 			printf("Error");
+			return 1;
 	}
+	
+	return 0;
 	
 }
 
