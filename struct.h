@@ -4,8 +4,8 @@ typedef struct Common Common ;
 struct Common
 {
 	char title[500]; //String
-	char condition; // New, Fine, Very good, Good, Fair, Poor, Ex-librairy.   
-	char licence[500];
+	char condition; // New, Fine, Very good, Good, Fair, Poor, Ex-library.   
+	char license[500];
 	char place[100];
 	char version;//Digital, Material
 	char description[1000];
@@ -22,7 +22,7 @@ struct Book
 	Common common;
 	
 	char publisher[100];
-	char serie[100];
+	char series[100];
 
 	char genre[10];
 	
