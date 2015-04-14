@@ -1,12 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <time.h>
-#include "frozen.h"
-#include "struct.h"
-#include "macros.h"
-#include "cli.h"
+#include "main.h"
 
 int extractJson(char file[], char **json)
 {
@@ -90,7 +82,7 @@ int addBook()
 		READ("Condition [New - Fine - Very good- Good - fAir - Poor - Ex-library]",2,'c',&book.common.condition)
 	}while(book.common.condition != 'N' && book.common.condition != 'F' && book.common.condition != 'V' && book.common.condition != 'G' && book.common.condition != 'A' && book.common.condition != 'P' && book.common.condition != 'E');
 	
-	READ("License",501,'s',&book.common.lisence)
+	READ("License",501,'s',&book.common.license)
 	READ("Place",101,'s',&book.common.place)
 	
 	do
@@ -115,7 +107,7 @@ int addBook()
 	}while(!isdigit(book.nbTranslator) && book.nbTranslator<0 );	
 	if( book.nbTranslator >= 1)
 	{
-		*book.translator = malloc(book.nbTranslator * sizeof(char));
+		book.translator = malloc(book.nbTranslator * sizeof(char *));
 		for(i=0; i<book.nbTranslator; i++)
 		{
 			book.translator[i] = malloc(100 * sizeof(char));		
@@ -127,7 +119,7 @@ int addBook()
 			 * with readgui
 			 **/
 			
-			printf("\nTranslator n. %d : ", i+1);
+			printf("\nTranslator n. %d ", i+1);
 			READ("",101,'s',&tmpString)
 			strcpy(book.translator[i], tmpString);
 		}
@@ -146,7 +138,7 @@ int addBook()
 	}while(!isdigit(book.nbAuthor) && book.nbAuthor<0 );
 	if( book.nbAuthor >= 1)
 	{
-		*book.author = malloc(book.nbAuthor * sizeof(char));
+		book.author = malloc(book.nbAuthor * sizeof(char *));
 		for(i=0; i<book.nbAuthor; i++)
 		{
 			book.author[i] = malloc(100 * sizeof(char));		
@@ -157,7 +149,7 @@ int addBook()
 			 * to make it compatible
 			 * with readgui
 			 **/
-			printf("\nAuthor n. %d : ", i+1);
+			printf("\nAuthor n. %d ", i+1);
 			READ("",101,'s',&tmpString)
 			strcpy(book.author[i], tmpString);
 		}
@@ -189,7 +181,7 @@ int addBook()
 	return 0;
 }
 
-int writeJson (BOOK book)
+int writeJson (Book book)
 {
 	int i = 0;
 	FILE* jsonFile = NULL;
@@ -214,25 +206,33 @@ int writeJson (BOOK book)
 			fprintf(jsonFile,"{");
 				fprintf(jsonFile,"\"publisher\": \"%s\",", book.publisher);
 				fprintf(jsonFile,"\"series\": \"%s\",", book.series);
-				fprintf(jsonFile,"\"pages\": \"%d\",", book.pages);
+				fprintf(jsonFile,"\"page\": \"%d\",", book.page);
 				fprintf(jsonFile,"\"authors\":[");
 				
-				for(i=0; i< nbAuthor; i++)
+				for(i=0; i< book.nbAuthor; i++)
+					
 				{
-					fprintf(jsonFile,"\"%s\",", book.author[i]);
+					if(book.author[i] != "\0")
+					{	
+						fprintf(jsonFile,"\"%s\",", book.author[i]);
+				
+					}
 				}
 				
 				fprintf(jsonFile,"],");
 				fprintf(jsonFile,"\"genre\": \"%s\",", book.genre);
 				fprintf(jsonFile,"\"translators\":[");
 				
-				for(i=0; i< nbTranslator; i++)
+				for(i=0; i< book.nbTranslator; i++)
 				{
-					fprintf(jsonFile,"\"%s\",", book.translator[i]);
+					if(book.translator[i] != "\0")
+					{
+						fprintf(jsonFile,"\"%s\",", book.translator[i]);
+					}
 				}
 				
 				fprintf(jsonFile,"],");
-				fprintf(jsonFile,"\"version\": \"%c\",", book.version);
+				fprintf(jsonFile,"\"format\": \"%c\",", book.format);
 				fprintf(jsonFile,"\"isbn\": \"%s\",", book.isbn);
 			fprintf(jsonFile,"},");
 			
@@ -245,9 +245,9 @@ int writeJson (BOOK book)
 				fprintf(jsonFile,"\"procurement_date\":\"%s\",", book.common.procurement_date);
 				fprintf(jsonFile,"\"place\": \"%s\",", book.common.place);
 				fprintf(jsonFile,"\"release_date\": \"%s\",", book.common.release_date);
-				fprintf(jsonFile,"\"format\": \"%c\",", book.common.format);
+				fprintf(jsonFile,"\"Version\": \"%c\",", book.common.version);
 				fprintf(jsonFile,"\"language\": \"%s\",", book.common.language);
-				fprintf(jsonFile,"\"description\":%s", book.common.description);
+				fprintf(jsonFile,"\"description\":\"%s\"", book.common.description);
 			fprintf(jsonFile,"}");
 			
 		fprintf(jsonFile,"}");

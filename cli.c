@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h> 
-#include <string.h>
-#include <ctype.h>
-#include "cli.h"
+#include "main.h"
 
 int readcli(char description[], int size, char type, void *pointer)
 {
@@ -45,7 +41,6 @@ int readcli(char description[], int size, char type, void *pointer)
 			break;
 		
 			case 'i' :
-				printf("%s", string);
 				*((int *)pointer) = strtol(string,NULL, 10); 
 			break;
 			 

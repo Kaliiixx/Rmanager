@@ -1,27 +1,19 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "frozen.h"
-#include "json.h"
-#include "struct.h"
+#include "main.h"
 
 int main(int argc, char *argv[])
 {
-	struct json_token *arr, *tok;
-	char *json = NULL;
-	addBook();
-	if (extractJson("files/model.json", &json))
+	if (argc > 1)
 	{
+		if (argv[1] == "add\0" )
+		{
+			addBook();
+		}
+	}
+	else
+	{
+		printf("\nrmanager help [COMMAND] -- display help\nrmanager add CATEGORIE-- add an element to the database\nrmanager del FILENUMBER -- delete the element associated to FILENUMBER from the database\nrmanager import FILE CATEGORIE -- import an element to one categorie of the database\nrmanager config -- open the configuration prompt\nrmanager create MODEL -- create a new categorie.\n");
 
-		// Tokenize json string, fill in tokens array
-		arr = parse_json2(json, strlen(json));
-
-		//Search for parameter "bar" and print it's value
-		tok = find_json_token(arr, "type");
-		printf("Value of bar is: %.*s\n", tok->len, tok->ptr);
-
-		//Do not forget to free allocated tokens array
-		free(arr);
+	
 	}
 	
 	return 0;
