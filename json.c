@@ -97,14 +97,14 @@ int addBook()
 	READ("Language",6,'s',&book.common.language)
 	do {
 		READ("Number (≥0)",100,'i',&book.common.number)
-	}while(!isdigit(book.common.number) && book.common.number<0 );
+	}while(isdigit(book.common.number) && book.common.number<0 );
 
 	READ("Publisher",101,'s',&book.publisher)
 	READ("Series",101,'s',&book.series)
 	READ("Genre",11,'s',&book.genre)
 	do {
 		READ("Number of translators (≥0)",100,'i',&book.nbTranslator)
-	}while(!isdigit(book.nbTranslator) && book.nbTranslator<0 );	
+	}while(isdigit(book.nbTranslator) && book.nbTranslator<0 );	
 	if( book.nbTranslator >= 1)
 	{
 		book.translator = malloc(book.nbTranslator * sizeof(char *));
@@ -132,10 +132,10 @@ int addBook()
 	
 	do {
 		READ("Version [Digital - Material]",2,'c',&book.common.version)
-	}while(book.common.version != 'D' && book.common.version != 'M');
+	}while(book.common.version != 'D' || book.common.version != 'M');
 	do {
 		READ("Number of authors (≥0):",100,'i',&book.nbAuthor)
-	}while(!isdigit(book.nbAuthor) && book.nbAuthor<0 );
+	}while(isdigit(book.nbAuthor) && book.nbAuthor<0 );
 	if( book.nbAuthor >= 1)
 	{
 		book.author = malloc(book.nbAuthor * sizeof(char *));
@@ -157,7 +157,7 @@ int addBook()
 	READ("ISBN",18,'s',&book.isbn)
 	do {
 		READ("Pages",100,'i',&book.page)
-	}while(!isdigit(book.page) && book.page<=0);
+	}while(isdigit(book.page) && book.page<=0);
 	writeJson(book);
 	
 	if( book.nbTranslator >= 1)

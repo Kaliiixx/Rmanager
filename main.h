@@ -7,7 +7,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
-#include "frozen.h"
 #include "struct.h"
 #include "macros.h"
 #include "cli.h"
