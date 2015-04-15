@@ -41,8 +41,16 @@ int readcli(char description[], int size, char type, void *pointer)
 			break;
 		
 			case 'i' :
-				*((int *)pointer) = strtol(string,NULL, 10); 
-			break;
+				if ( strtol(string,NULL, 10) == 0 && string [0] != '0')
+				{
+					*((int *)pointer) =  -1;
+				}	
+				
+				else
+				{
+					*((int *)pointer) = strtol(string,NULL, 10); 
+				}
+				break;
 			 
 			default :
 				printf("Type error");
