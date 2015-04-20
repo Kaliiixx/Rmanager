@@ -7,10 +7,10 @@
 CC = gcc
 CFLAGS = -Wall
 
-all: main.o json.o cli.o
-	$(CC) main.o json.o cli.o -o rmanager
+all: main.o json.o cli.o file.o
+	$(CC) main.o json.o cli.o file.o -o rmanager
 
-main.o: json.c main.c 
+main.o: main.c 
 	$(CC) -c main.c -o main.o $(CFLAGS)
 
 json.o: json.c 
@@ -19,6 +19,8 @@ json.o: json.c
 cli.o: cli.c
 	$(CC) -c cli.c -o cli.o  $(CFLAGS)
 
+file.o: file.c
+	$(CC) -c file.c -o file.o $(CFLAGS)
 
 # clean
 clean:
