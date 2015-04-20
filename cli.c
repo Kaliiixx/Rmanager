@@ -14,7 +14,7 @@ int readcli(char description[], int size, char type, void *pointer)
 
 	string = malloc(sizeof(char)*size);
 	
-	printf("\n%s : ", description);
+	printf("\n%s: ", description);
 	
 	if ( fgets(string, size, stdin) != NULL )
 	{
