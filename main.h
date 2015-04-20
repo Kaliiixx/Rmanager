@@ -11,5 +11,6 @@
 #include "macros.h"
 #include "cli.h"
 #include "json.h"
+#include "file.h"
 
 #endif
