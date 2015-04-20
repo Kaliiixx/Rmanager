@@ -95,14 +95,14 @@ int addBook()
 	READ("Release date",11,'s',&book.common.release_date)
 	READ("Language",6,'s',&book.common.language)
 	do {
-		READ("Number (≥0)",2,'i',&book.common.number)
+		READ("Number (≥0)",100,'i',&book.common.number)
 	}while(!isdigit(book.common.number) && book.common.number<0 );
 
 	READ("Publisher",101,'s',&book.publisher)
 	READ("Series",101,'s',&book.series)
 	READ("Genre",11,'s',&book.genre)
 	do {
-		READ("Number of translators (≥0)",2,'i',&book.nbTranslator)
+		READ("Number of translators (≥0)",100,'i',&book.nbTranslator)
 	}while(!isdigit(book.nbTranslator) && book.nbTranslator<0 );	
 	if( book.nbTranslator >= 1)
 	{
@@ -133,7 +133,7 @@ int addBook()
 		READ("Version [Digital - Material]",2,'c',&book.common.version)
 	}while(book.common.version != 'D' && book.common.version != 'M');
 	do {
-		READ("Number of authors (≥0):",2,'i',&book.nbAuthor)
+		READ("Number of authors (≥0):",100,'i',&book.nbAuthor)
 	}while(!isdigit(book.nbAuthor) && book.nbAuthor<0 );
 	if( book.nbAuthor >= 1)
 	{
@@ -155,7 +155,7 @@ int addBook()
 	}
 	READ("ISBN",18,'s',&book.isbn)
 	do {
-		READ("Pages",2,'i',&book.page)
+		READ("Pages",100,'i',&book.page)
 	}while(!isdigit(book.page) && book.page<0);
 	writeJson(book);
 	
@@ -199,58 +199,58 @@ int writeJson (Book book)
 
 	if( jsonFile != NULL )
 	{
-		fprintf(jsonFile,"{");
+		fprintf(jsonFile,"{\n");
 		
-			fprintf(jsonFile,"type: \"BOOK\",");
-			fprintf(jsonFile,"{");
-				fprintf(jsonFile,"\"publisher\": \"%s\",", book.publisher);
-				fprintf(jsonFile,"\"series\": \"%s\",", book.series);
-				fprintf(jsonFile,"\"page\": \"%d\",", book.page);
-				fprintf(jsonFile,"\"authors\":[");
+			fprintf(jsonFile,"\ttype: \"BOOK\",\n");
+			fprintf(jsonFile,"\t{\n");
+				fprintf(jsonFile,"\t\t\"publisher\": \"%s\",\n", book.publisher);
+				fprintf(jsonFile,"\t\t\"series\": \"%s\",\n", book.series);
+				fprintf(jsonFile,"\t\t\"page\": \"%d\",\n", book.page);
+				fprintf(jsonFile,"\t\t\"authors\":\n\t\t\t[\n");
 				
 				for(i=0; i< book.nbAuthor; i++)
 					
 				{
 					if( strcmp(book.author[i], "\0") )
 					{	
-						fprintf(jsonFile,"\"%s\",", book.author[i]);
+						fprintf(jsonFile,"\t\t\t\t\"%s\",\n", book.author[i]);
 					}
 				}
 				fseek(jsonFile, -1, SEEK_CUR);
 				
-				fprintf(jsonFile,"],");
-				fprintf(jsonFile,"\"genre\": \"%s\",", book.genre);
-				fprintf(jsonFile,"\"translators\":[");
+				fprintf(jsonFile,"\n\t\t\t],\n");
+				fprintf(jsonFile,"\t\t\"genre\": \"%s\",\n", book.genre);
+				fprintf(jsonFile,"\t\t\"translators\":\n\t\t\t[\n");
 				
 				for(i=0; i< book.nbTranslator; i++)
 				{
 					if( strcmp(book.translator[i], "\0") )
 					{
-						fprintf(jsonFile,"\"%s\",", book.translator[i]);
+						fprintf(jsonFile,"\t\t\t\t\"%s\",\n", book.translator[i]);
 					}
 				}
 				fseek(jsonFile, -1, SEEK_CUR);
 				
-				fprintf(jsonFile,"],");
-				fprintf(jsonFile,"\"format\": \"%c\",", book.format);
-				fprintf(jsonFile,"\"isbn\": \"%s\",", book.isbn);
-			fprintf(jsonFile,"},");
+				fprintf(jsonFile,"\n\t\t\t],\n");
+				fprintf(jsonFile,"\t\t\"format\": \"%c\",\n", book.format);
+				fprintf(jsonFile,"\t\t\"isbn\": \"%s\",\n", book.isbn);
+			fprintf(jsonFile,"\t},\n\n");
 			
-			fprintf(jsonFile,"\"common\" :");
-			fprintf(jsonFile,"{");
-				fprintf(jsonFile,"\"title\": \"%s\",", book.common.title);
-				fprintf(jsonFile,"\"condition\" : \"%c\",", book.common.condition);
-				fprintf(jsonFile,"\"license\": \"%s\",", book.common.license);
-				fprintf(jsonFile,"\"number\": \"%d\",", book.common.number);
-				fprintf(jsonFile,"\"procurement_date\":\"%s\",", book.common.procurement_date);
-				fprintf(jsonFile,"\"place\": \"%s\",", book.common.place);
-				fprintf(jsonFile,"\"release_date\": \"%s\",", book.common.release_date);
-				fprintf(jsonFile,"\"Version\": \"%c\",", book.common.version);
-				fprintf(jsonFile,"\"language\": \"%s\",", book.common.language);
-				fprintf(jsonFile,"\"description\":\"%s\"", book.common.description);
-			fprintf(jsonFile,"}");
+			fprintf(jsonFile,"\t\"common\" :\n");
+			fprintf(jsonFile,"\t{\n");
+				fprintf(jsonFile,"\t\t\"title\": \"%s\",\n", book.common.title);
+				fprintf(jsonFile,"\t\t\"condition\" : \"%c\",\n", book.common.condition);
+				fprintf(jsonFile,"\t\t\"license\": \"%s\",\n", book.common.license);
+				fprintf(jsonFile,"\t\t\"number\": \"%d\",\n", book.common.number);
+				fprintf(jsonFile,"\t\t\"procurement_date\":\"%s\",\n", book.common.procurement_date);
+				fprintf(jsonFile,"\t\t\"place\": \"%s\",\n", book.common.place);
+				fprintf(jsonFile,"\t\t\"release_date\": \"%s\",\n", book.common.release_date);
+				fprintf(jsonFile,"\t\t\"Version\": \"%c\",\n", book.common.version);
+				fprintf(jsonFile,"\t\t\"language\": \"%s\",\n", book.common.language);
+				fprintf(jsonFile,"\t\t\"description\":\"%s\"\n", book.common.description);
+			fprintf(jsonFile,"\t}\n");
 			
-		fprintf(jsonFile,"}");
+		fprintf(jsonFile,"}\n");
 		
 		fclose(jsonFile);
 	}
