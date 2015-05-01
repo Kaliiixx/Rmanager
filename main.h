@@ -7,10 +7,12 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <dirent.h>
 #include "struct.h"
 #include "macros.h"
 #include "cli.h"
 #include "json.h"
 #include "file.h"
+#include "jsmn.h"
 
 #endif

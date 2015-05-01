@@ -9,62 +9,62 @@ int extractJson(char file[], char **json)
 	FILE* jsonFile = NULL;
 
 	jsonFile = fopen(file, "r");
-	if ( jsonFile != NULL )
+	if ( jsonFile == NULL )
 	{		
-		for (fileLength=0; (c = fgetc(jsonFile)) != EOF; )
+		return 1;
+	}
+	for (fileLength=0; (c = fgetc(jsonFile)) != EOF; )
+	{
+		//do not count only letters, numbers, and punctuation except in the quotes
+		
+		if ( c == '"')
 		{
-			//do not count only letters, numbers, and punctuation except in the quotes
-			
-			if ( c == '"')
-			{
-				quote ++ ;
+			quote ++ ;
 
-			}
-
-			if ( isalnum(c) || ispunct(c) ||  quote%2 == 0)
-			{
-				fileLength++ ;
-			}
 		}
-		
-		quote = 1 ;
 
-		//get amount of characters to allocate a right size string
-		*json = malloc(fileLength * sizeof(char));
-		
-		rewind(jsonFile);
-		
-		
-		for(i=0; i< fileLength; i++)
+		if ( isalnum(c) || ispunct(c) ||  quote%2 == 0)
 		{
-			//write only readable characters		
-			c = fgetc(jsonFile);
-
-			if ( c == '"')
-			{
-				quote++ ;			
-			}
-		
-			if(isalnum(c) ||  ispunct(c) || quote%2 == 0)
-	
-			{
-		
-				(*json)[i] = (char)c;
-			}
-			
-			else
-			{
-				i--;						
-			}
-		
-		
-			
+			fileLength++ ;
 		}
-	fclose(jsonFile);
-	return 1;
 	}
 	
-	else { printf("Error : Could not open the file"); return 0;}
+	quote = 1 ;
+
+	//get amount of characters to allocate a right size string
+	*json = malloc(fileLength * sizeof(char));
+	
+	rewind(jsonFile);
+	
+	
+	for(i=0; i< fileLength; i++)
+	{
+		//write only readable characters		
+		c = fgetc(jsonFile);
+
+		if ( c == '"')
+		{
+			quote++ ;			
+		}
+	
+		if(isalnum(c) ||  ispunct(c) || quote%2 == 0)
+
+		{
+	
+			(*json)[i] = (char)c;
+		}
+		
+		else
+		{
+			i--;						
+		}
+	
+	
+		
+	}
+	fclose(jsonFile);
+	
+	return 0;
 }
 
 int addBook()
@@ -205,7 +205,7 @@ int writeJson (Book book)
 			fprintf(jsonFile,"\t{\n");
 				fprintf(jsonFile,"\t\t\"publisher\": \"%s\",\n", book.publisher);
 				fprintf(jsonFile,"\t\t\"series\": \"%s\",\n", book.series);
-				fprintf(jsonFile,"\t\t\"page\": \"%d\",\n", book.page);
+				fprintf(jsonFile,"\t\t\"page\": %d,\n", book.page);
 				fprintf(jsonFile,"\t\t\"authors\":\n\t\t\t[\n");
 				
 				for(i=0; i< book.nbAuthor; i++)
@@ -241,7 +241,7 @@ int writeJson (Book book)
 				fprintf(jsonFile,"\t\t\"title\": \"%s\",\n", book.common.title);
 				fprintf(jsonFile,"\t\t\"condition\" : \"%c\",\n", book.common.condition);
 				fprintf(jsonFile,"\t\t\"license\": \"%s\",\n", book.common.license);
-				fprintf(jsonFile,"\t\t\"number\": \"%d\",\n", book.common.number);
+				fprintf(jsonFile,"\t\t\"number\": %d,\n", book.common.number);
 				fprintf(jsonFile,"\t\t\"procurement_date\":\"%s\",\n", book.common.procurement_date);
 				fprintf(jsonFile,"\t\t\"place\": \"%s\",\n", book.common.place);
 				fprintf(jsonFile,"\t\t\"release_date\": \"%s\",\n", book.common.release_date);
