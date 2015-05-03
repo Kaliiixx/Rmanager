@@ -5,7 +5,7 @@
 .SUFFIXES:
 
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Werror
 
 all: main.o json.o cli.o file.o
 	$(CC) main.o json.o cli.o file.o -o rmanager

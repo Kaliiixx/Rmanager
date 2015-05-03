@@ -37,7 +37,6 @@ int listBook()
 	struct dirent* file = NULL;
 	
 	Book* bookList;
-	jsmn_parser parser;
 
 	fileList = fopen("fileList","w+");
 
@@ -48,15 +47,19 @@ int listBook()
 
 	dir = opendir(".");
 
-	if (dir != NULL)
+	if (dir == NULL)
 	{
-		while ((file = readdir(dir)) != NULL)
-		{
-				fprintf(fileList,"%s\n", file->d_name);
-		}			
-		closedir(dir);
+		return 1;
 	}
-	if( fseek(fileList, 0, SEEK_END) != 0)
+	
+	while ((file = readdir(dir)) != NULL)
+	{
+			fprintf(fileList,"%s\n", file->d_name);
+	}			
+
+	closedir(dir);
+	
+	if( fseek(fileList, 0, SEEK_SET) != 0)
 	{
 		return 1;	
 	}
@@ -86,7 +89,7 @@ int listBook()
 	
 	for(i=0; i<nbFile; i++)
 	{
-		fileName[i] = malloc(sizeof(char) * 100);
+		fileName[i] = malloc(sizeof(char) * 256);
 
 		if(fileName[i] == NULL)
 		{ 
@@ -94,40 +97,43 @@ int listBook()
 		}
 	}
 	
-	if (fseek(fileList, 0, SEEK_END) !=0)
+	if ( fseek(fileList, 0, SEEK_SET) != 0 )
 	{
 		return 1;
 	}
 	
-	i=0;  j=0;
-	
+	i = j = 0;
+		
 	do
 	{
 		c = fgetc(fileList);
 		if(c == '\n')
 		{
+			printf("\n%s\n", fileName[i]);
 			i++;
 			j=0;
 		}
 		else
 		{
-			fileName[i][j] = (char)c;				
+			fileName[i][j] = (char)c;
 		}
 	}while(c!=EOF);
 	
 	fclose(fileList);
 
+
 	for(i=0; i<nbFile; i++)
 	{
-		if(extractJson(filelist,json) != 0)
+		if(extractJson(fileName[i],&json) != 0)
 		{
 			return 1;
 		}
 
 				
 			
-		fclose(fileList);
+	
 	}
 		
 	return 0;
 }
+
