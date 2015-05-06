@@ -39,7 +39,7 @@ int listBook()
 
 	char **fileName, *json; // A list of names, and an array wich contents
 				// json to parse it.
-	int nbFile = 0, i, j, c, d;
+	int nbFile = 0, i = 0, j = 0, c = 0, d = 0, e = 0;
 	
 	FILE* fileList = NULL;      //These variables
 	DIR* dir = NULL;            //are used to list 
@@ -130,25 +130,40 @@ int listBook()
 		return 1;
 	}
 	
-	i = j = 0;
+	i = j = d = 0;
 		
 	do
 	{
+		 
 		c = fgetc(fileList);
-		if(c == '\n')
+		if ( d == 1 && c =='.')
 		{
-			printf("\n%s\n", fileName[i]);
-			i++;
-			j=0;
+			while ( c != '\n')
+			{
+				c = fgetc(fileList);
+			}
+			fseek(fileList, 0, -1);
+			d = 0;
 		}
 		else
-		{
-			fileName[i][j] = (char)c;
+		{	
+			if(c == '\n')
+			{
+				printf("\n%s\n", fileName[i]);
+				i++;
+				j=0;
+				d = 1 ;
+			}
+			else
+			{
+				fileName[i][j] = (char)c;
+				d = 0;
+			}
 		}
-	}while(c!=EOF)d
+	}while(c!=EOF);
 	
 	fclose(fileList);
-
+	printf("test");
 
 	for(i=0; i<nbFile; i++)
 	{
