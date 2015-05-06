@@ -2,6 +2,10 @@
 
 int delBook()
 {
+	/* This function is aimed on deleting books
+	 * from the database, using their ID
+	 */
+
 	char fileName[128];
 
 	FILE* jsonFile = NULL;
@@ -10,31 +14,36 @@ int delBook()
 	
 	jsonFile = fopen (fileName,"r"); 
 
-	if ( jsonFile != NULL)
+	if ( jsonFile == NULL) //This ID does not exit : do not remove. 
 	{
 		fclose(jsonFile);
-		
-		remove(fileName); // https://www.gnu.org/software/libc/manual/html_node/Deleting-Files.html	
-		
-		return 0;
-	}
-
-	else
-	{
 		return 1;
 	}
+
+	fclose(jsonFile);
+	
+	remove(fileName); // https://www.gnu.org/software/libc/manual/html_node/Deleting-Files.html	
+	
+	return 0;
 
 
 }
 
 int listBook()
 {
-	char **fileName, *json;
-	int nbFile = 0, i, j, c;
+	/* This fuction is aimed on listing
+	 * books of the database. Their ID
+	 * is stored in a file ; then in Book
+	 *  variable and endly displayed.
+	 */
+
+	char **fileName, *json; // A list of names, and an array wich contents
+				// json to parse it.
+	int nbFile = 0, i, j, c, d;
 	
-	FILE* fileList = NULL;
-	DIR* dir = NULL;
-	struct dirent* file = NULL;
+	FILE* fileList = NULL;      //These variables
+	DIR* dir = NULL;            //are used to list 
+	struct dirent* file = NULL; // a directory.
 	
 	Book* bookList;
 
@@ -45,33 +54,47 @@ int listBook()
 		return 1;
 	}
 
-	dir = opendir(".");
+	dir = opendir("."); // Open a directory set in the config file.
 
 	if (dir == NULL)
 	{
 		return 1;
 	}
 	
-	while ((file = readdir(dir)) != NULL)
+	while ((file = readdir(dir)) != NULL) //list all files of the directory
 	{
 			fprintf(fileList,"%s\n", file->d_name);
 	}			
 
 	closedir(dir);
 	
-	if( fseek(fileList, 0, SEEK_SET) != 0)
+	if( fseek(fileList, 0, SEEK_SET) != 0) //reset the cursor a the top of the file
 	{
 		return 1;	
 	}
 	
+	d = 0 ;
+
 	do
 	{
+		// This loop count all file of the directory (Books)
+		// except hidden files (configs and attachments)
+		
 		c = fgetc(fileList);
+		
+		if(c == '.' && d == 1)
+		{
+			nbFile--;
+			d = 0;
+		}
+
 		if(c == '\n')
 		{
+			d = 1;
 			nbFile++;
 		}
 	}while(c!=EOF);
+
 	
 	bookList = malloc(sizeof(Book) * nbFile);
 
@@ -80,6 +103,10 @@ int listBook()
 		return 1;
 	}
 	
+	/* This part of the file allocate a 2 dimension array
+	 * on this form fileName[NumberOfFiles][256] to stock 
+	 * their ID.
+	 *  {{BEGIN}} */
 	fileName = malloc(sizeof(char) * nbFile);
 
 	if(fileName == NULL)
@@ -96,8 +123,9 @@ int listBook()
 			return 1;	
 		}
 	}
+	/*{{END}}*/ 
 	
-	if ( fseek(fileList, 0, SEEK_SET) != 0 )
+	if ( fseek(fileList, 0, SEEK_SET) != 0 ) // Return to top
 	{
 		return 1;
 	}
@@ -117,7 +145,7 @@ int listBook()
 		{
 			fileName[i][j] = (char)c;
 		}
-	}while(c!=EOF);
+	}while(c!=EOF)d
 	
 	fclose(fileList);
 
