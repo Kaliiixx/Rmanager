@@ -36,16 +36,15 @@ int listBook()
 	 * is stored in a file ; then in Book
 	 *  variable and endly displayed.
 	 */
-
 	char **fileName, *json; // A list of names, and an array wich contents
 				// json to parse it.
-	int nbFile = 0, i = 0, j = 0, c = 0, d = 0, e = 0;
+	int nbFile = 0, nbHiddenFile = 0, i = 0, j = 0, c = 0, d = 0;
 	
 	FILE* fileList = NULL;      //These variables
 	DIR* dir = NULL;            //are used to list 
 	struct dirent* file = NULL; // a directory.
 	
-	Book* bookList;
+	Book* bookList = NULL;
 
 	fileList = fopen("fileList","w+");
 
@@ -81,10 +80,10 @@ int listBook()
 		// except hidden files (configs and attachments)
 		
 		c = fgetc(fileList);
-		
+	
 		if(c == '.' && d == 1)
 		{
-			nbFile--;
+			nbHiddenFile++;
 			d = 0;
 		}
 
@@ -96,7 +95,7 @@ int listBook()
 	}while(c!=EOF);
 
 	
-	bookList = malloc(sizeof(Book) * nbFile);
+	bookList = malloc(sizeof(Book) * (nbFile-nbHiddenFile));
 
 	if(bookList == NULL)
 	{
@@ -107,7 +106,8 @@ int listBook()
 	 * on this form fileName[NumberOfFiles][256] to stock 
 	 * their ID.
 	 *  {{BEGIN}} */
-	fileName = malloc(sizeof(char) * nbFile);
+	nbFile++;
+	fileName = malloc(sizeof(char*) * nbFile);
 
 	if(fileName == NULL)
 	{
@@ -132,38 +132,25 @@ int listBook()
 	
 	i = j = d = 0;
 		
+	printf("Number of files : %d \n Hidden Files : %d \n", nbFile, nbHiddenFile);
 	do
 	{
-		 
 		c = fgetc(fileList);
-		if ( d == 1 && c =='.')
+
+		if(c == '\n')
 		{
-			while ( c != '\n')
-			{
-				c = fgetc(fileList);
-			}
-			fseek(fileList, 0, -1);
-			d = 0;
+			printf("\n%s\n", fileName[i]);
+			i++;
+			j=0;
 		}
 		else
-		{	
-			if(c == '\n')
-			{
-				printf("\n%s\n", fileName[i]);
-				i++;
-				j=0;
-				d = 1 ;
-			}
-			else
-			{
-				fileName[i][j] = (char)c;
-				d = 0;
-			}
+		{
+			fileName[i][j] = (char)c;
+			j++;
 		}
 	}while(c!=EOF);
 	
 	fclose(fileList);
-	printf("test");
 
 	for(i=0; i<nbFile; i++)
 	{
