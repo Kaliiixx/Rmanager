@@ -151,17 +151,17 @@ int listBook()
 	}while(c!=EOF);
 	
 	fclose(fileList);
-
+	
+	d = 0;
+	
 	for(i=0; i<nbFile; i++)
 	{
 		if(extractJson(fileName[i],&json) != 0)
 		{
 			return 1;
 		}
-
-				
-			
 	
+
 	}
 		
 	return 0;

@@ -201,7 +201,7 @@ int writeJson (Book book)
 	{
 		fprintf(jsonFile,"{\n");
 		
-			fprintf(jsonFile,"\ttype: \"BOOK\",\n");
+			fprintf(jsonFile,"\t\"type\": \"BOOK\",\n");
 			fprintf(jsonFile,"\t{\n");
 				fprintf(jsonFile,"\t\t\"publisher\": \"%s\",\n", book.publisher);
 				fprintf(jsonFile,"\t\t\"series\": \"%s\",\n", book.series);
@@ -215,7 +215,15 @@ int writeJson (Book book)
 					{	
 						fprintf(jsonFile,"\t\t\t\t\"%s\",\n", book.author[i]);
 					}
+
+					if( i == (book.nbAuthor-1) )
+					{
+						fseek(jsonFile, -1, SEEK_CUR);
+					}
+
+
 				}
+				fprintf(jsonFile,"\n");
 				fseek(jsonFile, -1, SEEK_CUR);
 				
 				fprintf(jsonFile,"\n\t\t\t],\n");
@@ -228,7 +236,14 @@ int writeJson (Book book)
 					{
 						fprintf(jsonFile,"\t\t\t\t\"%s\",\n", book.translator[i]);
 					}
+					
+					if( i == (book.nbAuthor-1) )
+					{
+					        fseek(jsonFile, -1, SEEK_CUR);
+					}
+
 				}
+				fprintf(jsonFile,"\n");
 				fseek(jsonFile, -1, SEEK_CUR);
 				
 				fprintf(jsonFile,"\n\t\t\t],\n");
